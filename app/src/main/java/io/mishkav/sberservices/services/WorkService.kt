@@ -6,34 +6,38 @@ import android.os.IBinder
 import android.util.Log
 import android.widget.Toast
 import io.mishkav.sberservices.utils.Constants
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.launch
+import kotlin.concurrent.thread
 
 class WorkService : Service() {
+    private lateinit var someCoroutine: Job
 
     override fun onCreate() {
         super.onCreate()
-
         Log.d(TAG_SERVICE, Constants.ON_CREATE)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG_SERVICE, Constants.ON_START_COMMAND)
+        someCoroutine = GlobalScope.launch {
+            while (true) {
 
-        //TODO
-
+            }
+        }
         return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onDestroy() {
         Log.d(TAG_SERVICE, Constants.ON_DESTROY)
-
-        //TODO
-
+        someCoroutine.cancel()
         super.onDestroy()
     }
 
     override fun onBind(p0: Intent?): IBinder? {
         Log.d(TAG_SERVICE, Constants.ON_BIND)
-
         return null
     }
 

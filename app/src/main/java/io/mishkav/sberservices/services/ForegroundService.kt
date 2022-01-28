@@ -23,19 +23,16 @@ class ForegroundService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG_SERVICE, Constants.ON_START_COMMAND)
         showNotification()
-
         return START_STICKY
     }
 
     override fun onDestroy() {
         Log.d(TAG_SERVICE, Constants.ON_DESTROY)
-
         super.onDestroy()
     }
 
     override fun onBind(p0: Intent?): IBinder? {
         Log.d(TAG_SERVICE, Constants.ON_BIND)
-
         return null
     }
 
