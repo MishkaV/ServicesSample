@@ -4,13 +4,10 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
-import android.widget.Toast
 import io.mishkav.sberservices.utils.Constants
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
-import kotlin.concurrent.thread
 
 class WorkService : Service() {
     private lateinit var someCoroutine: Job
