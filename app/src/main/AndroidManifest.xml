@@ -2,6 +2,8 @@
 <manifest package="io.mishkav.sberservices"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,8 +24,7 @@
         <service
             android:name=".services.WorkService"
             android:enabled="true"
-            android:exported="true"></service>
-
+            android:exported="true"/>
         <service
             android:name=".services.BindedService"
             android:enabled="true"
