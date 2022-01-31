@@ -7,6 +7,7 @@ import android.content.ServiceConnection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
+import android.view.View
 import io.mishkav.sberservices.services.BindedService
 import io.mishkav.sberservices.services.DemonService
 import io.mishkav.sberservices.services.ForegroundService
@@ -15,15 +16,17 @@ import io.mishkav.sberservices.services.WorkService
 class MainActivity : AppCompatActivity() {
     private lateinit var bindedService: BindedService
     private var bound: Boolean = false
+    private lateinit var demonIntent: Intent
+    private lateinit var foregroundIntent: Intent
+    private lateinit var workIntent: Intent
+    private lateinit var bindedIntent: Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        initDemonService()
-        initForegroundService()
-        initWorkService()
-        initBindedService()
+        initIntens()
+        initButtons()
     }
 
     override fun onStop() {
@@ -32,27 +35,44 @@ class MainActivity : AppCompatActivity() {
         bound = false
     }
 
-    private fun initDemonService() {
-        Intent(this, DemonService::class.java).also { intent ->
-            startService(intent)
-        }
+    private fun initIntens() {
+        demonIntent = Intent(this, DemonService::class.java)
+        foregroundIntent = Intent(this, ForegroundService::class.java)
+        workIntent = Intent(this, WorkService::class.java)
+        bindedIntent = Intent(this, BindedService::class.java)
     }
 
-    private fun initForegroundService() {
-        Intent(this, ForegroundService::class.java).also { intent ->
-            startService(intent)
+    private fun initButtons() {
+        //Demon
+        findViewById<View>(R.id.start_demon).setOnClickListener {
+            startService(demonIntent)
         }
-    }
-
-    private fun initWorkService() {
-        Intent(this, WorkService::class.java).also { intent ->
-            startService(intent)
+        findViewById<View>(R.id.stop_demon).setOnClickListener {
+            stopService(demonIntent)
         }
-    }
 
-    private fun initBindedService() {
-        Intent(this, BindedService::class.java).also { intent ->
-            bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        //Foreground
+        findViewById<View>(R.id.start_foreground).setOnClickListener {
+            startService(foregroundIntent)
+        }
+        findViewById<View>(R.id.stop_foreground).setOnClickListener {
+            stopService(foregroundIntent)
+        }
+
+        //Work
+        findViewById<View>(R.id.start_work).setOnClickListener {
+            startService(workIntent)
+        }
+        findViewById<View>(R.id.stop_work).setOnClickListener {
+            stopService(workIntent)
+        }
+
+        //Binded
+        findViewById<View>(R.id.start_binded).setOnClickListener {
+            bindService(bindedIntent, connection, Context.BIND_AUTO_CREATE)
+        }
+        findViewById<View>(R.id.stop_binded).setOnClickListener {
+            unbindService(connection)
         }
     }
 
