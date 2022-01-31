@@ -13,26 +13,28 @@ import io.mishkav.sberservices.R
 import io.mishkav.sberservices.utils.Constants
 
 class ForegroundService : Service() {
+    private var code = 0
 
     override fun onCreate() {
         super.onCreate()
-        Log.d(TAG_SERVICE, Constants.ON_CREATE)
+        code = (0..10000).random()
+        Log.d(Constants.TAG_SBER_SERVICE, TAG_SERVICE + Constants.ON_CREATE + "-$code")
         createChannel()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d(TAG_SERVICE, Constants.ON_START_COMMAND)
+        Log.d(Constants.TAG_SBER_SERVICE, TAG_SERVICE + Constants.ON_START_COMMAND + "-$code")
         showNotification()
         return START_STICKY
     }
 
     override fun onDestroy() {
-        Log.d(TAG_SERVICE, Constants.ON_DESTROY)
+        Log.d(Constants.TAG_SBER_SERVICE, TAG_SERVICE + Constants.ON_DESTROY + "-$code")
         super.onDestroy()
     }
 
     override fun onBind(p0: Intent?): IBinder? {
-        Log.d(TAG_SERVICE, Constants.ON_BIND)
+        Log.d(Constants.TAG_SBER_SERVICE, TAG_SERVICE + Constants.ON_BIND + "-$code")
         return null
     }
 
@@ -60,14 +62,16 @@ class ForegroundService : Service() {
             .build()
 
         startForeground(NOTIFICATION_ID, notification)
+        Log.d(Constants.TAG_SBER_SERVICE, TAG_SERVICE + SHOW_NOTIFICATION + "-$code")
     }
 
     companion object {
-        private const val TAG_SERVICE = "FOREGROUND_SERVICE"
+        private const val TAG_SERVICE = "FOREGROUND_SERVICE: "
         private const val CHANNEL_ID = "CHANNEL ID"
         private const val CHANNEL_NAME = "CHANNEL NAME"
         private const val NOTIFICATION_ID = 123
         private const val NOTIFICATION_TITLE = "NOTIFICATION TITLE"
         private const val NOTIFICATION_CONTENT = "NOTIFICATION CONTENT"
+        private const val SHOW_NOTIFICATION = "SHOW NOTIFICATION"
     }
 }

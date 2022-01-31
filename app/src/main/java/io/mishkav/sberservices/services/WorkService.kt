@@ -8,19 +8,24 @@ import io.mishkav.sberservices.utils.Constants
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlin.concurrent.thread
 
 class WorkService : Service() {
-    private lateinit var someCoroutine: Job
+    private lateinit var someCoroutine: Thread
+    @Volatile
+    private var isDone = false
+    private var code = 0
 
     override fun onCreate() {
         super.onCreate()
-        Log.d(TAG_SERVICE, Constants.ON_CREATE)
+        code = (0..10000).random()
+        Log.d(Constants.TAG_SBER_SERVICE, TAG_SERVICE + Constants.ON_CREATE + "-$code")
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d(TAG_SERVICE, Constants.ON_START_COMMAND)
-        someCoroutine = GlobalScope.launch {
-            while (true) {
+        Log.d(Constants.TAG_SBER_SERVICE, TAG_SERVICE + Constants.ON_START_COMMAND + "-$code")
+        someCoroutine = thread {
+            while (!isDone) {
 
             }
         }
@@ -28,17 +33,18 @@ class WorkService : Service() {
     }
 
     override fun onDestroy() {
-        Log.d(TAG_SERVICE, Constants.ON_DESTROY)
-        someCoroutine.cancel()
+        Log.d(Constants.TAG_SBER_SERVICE, TAG_SERVICE + Constants.ON_DESTROY + "-$code")
+        isDone = true
+        someCoroutine.join()
         super.onDestroy()
     }
 
     override fun onBind(p0: Intent?): IBinder? {
-        Log.d(TAG_SERVICE, Constants.ON_BIND)
+        Log.d(Constants.TAG_SBER_SERVICE, TAG_SERVICE + Constants.ON_BIND + "-$code")
         return null
     }
 
     companion object {
-        private const val TAG_SERVICE = "WORK_SERVICE"
+        private const val TAG_SERVICE = "WORK_SERVICE: "
     }
 }
